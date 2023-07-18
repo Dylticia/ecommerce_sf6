@@ -8,6 +8,8 @@ use App\Entity\Categories;
 
 class CategoriesFixtures extends Fixture
 {
+    private $counter = 1; 
+
     public function load(ObjectManager $manager): void
     {
         //Créer un nouvel objet Categorie et Nourrir l'objet Categorie
@@ -34,6 +36,13 @@ class CategoriesFixtures extends Fixture
         $category->setParent($parent);
         $manager->persist($category);
         //faire un return de la category de façon à récupérer si c'est un parent:
+        
+
+        //stockage de référence que l'on va pouvoir récupérer avec les produits
+        $this->addReference('cat-'.$this->counter, $category);
+        //incrémentation du compteur:
+        $this->counter++;
+        
         return $category;
     }
    }
