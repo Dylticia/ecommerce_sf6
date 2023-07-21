@@ -1,18 +1,17 @@
 <?php
 
 namespace App\Controller;
-
+use App\Entity\Products;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 // use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use App\Entity\Products;
+
 
 	#[Route('/produits', name: 'products_')]
-	
 	class ProductsController extends AbstractController
 	{
-    #[Route('/', name: 'app_products')]
+    #[Route('/', name: 'index')]
 	    public function index(): Response
 	    {
 	        return $this->render('products/index.html.twig', [

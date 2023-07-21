@@ -38,9 +38,13 @@ class Products
     #[ORM\OneToMany(mappedBy: 'products', targetEntity: Images::class, orphanRemoval: true)]
     private Collection $images;
 
+    #[ORM\OneToMany(mappedBy: 'products', targetEntity: OrdersDetails::class)]
+    private Collection $ordersDetails;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
+        $this->ordersDetails = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -137,6 +141,22 @@ class Products
 
         return $this;
     }
+
+    public function removeOrdersDetail(OrdersDetails $ordersDetail): static
+    {
+        if ($this->ordersDetails->removeElement($ordersDetail)) {
+            // set the owning side to null (unless already changed)
+            if ($ordersDetail->getProducts() === $this) {
+                $ordersDetail->setProducts(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+
 
     public function removeImage(Images $image): static
     {
