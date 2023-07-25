@@ -18,7 +18,8 @@ use Symfony\Component\Routing\Annotation\Route;
 	            'controller_name' => 'ProductsController',
 	        ]);
 	    }
-	
+
+		
 	    #[Route('/{id}', name: 'details')]
 	    // #[App\Controller\ParamConverter('product', class: 'App\Entity\Products')]
 	    public function details(Products $product): Response
