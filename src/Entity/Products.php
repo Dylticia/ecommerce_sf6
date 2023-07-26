@@ -28,7 +28,10 @@ class Products
     #[ORM\Column]
     private ?int $stock = null;
 
-    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    // #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    // private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])] 
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
