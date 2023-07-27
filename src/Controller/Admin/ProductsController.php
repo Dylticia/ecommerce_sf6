@@ -25,6 +25,7 @@ class ProductsController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         //création d'un nouveau produit:
         $product = new Products();
+        
         //création du formulaire
         $productForm = $this->createForm(ProductsFormType::class, $product);
 
@@ -48,8 +49,6 @@ class ProductsController extends AbstractController
             return $this->redirectToRoute('admin_products_index');           
         }
 
-
-
         // 1ère syntaxe du return possible:
         return $this->render('admin/products/add.html.twig', [
             'productForm' => $productForm->createView()
@@ -61,11 +60,43 @@ class ProductsController extends AbstractController
     }
 
     #[Route('/edition/{id}', name: 'edit')]
-    public function edit(Products $product): Response
+    public function edit(Products $product, Request $request, EntityManagerInterface $em): Response
     {
         // vérification de la possiblité d'édition avec le voter pour l'utilisateur:
         $this->denyAccessUnlessGranted('PRODUCT_EDIT', $product);
-        return $this->render('admin/products/index.html.twig');
+       
+        //Division du prix par 100
+        $prix = $product->getPrice() / 100;
+        $product->setPrice($prix);
+       
+         //création du formulaire
+         $productForm = $this->createForm(ProductsFormType::class, $product);
+
+         //Traitement de la requête du formulaire
+         $productForm->handleRequest($request);
+         // dd pour le dumper: 
+         // dd($productForm);
+ 
+         //Vérification de la validité du formulaire soumis
+         if($productForm->isSubmitted() && $productForm->isValid()){
+             //Conversion du prix en centimes
+             $prix = $product->getPrice() * 100;
+             $product->setPrice($prix);
+             // dd($prix);
+ 
+             //Enregistrement dans la BDD (stockage)
+             $em->persist($product);
+             $em->flush();
+ 
+             //Redirection
+             return $this->redirectToRoute('admin_products_index');           
+         }
+ 
+         // 1ère syntaxe du return possible:
+         return $this->render('admin/products/edit.html.twig', [
+             'productForm' => $productForm->createView()
+         ]);
+ 
     }
     #[Route('/suppression/{id}', name: 'delete')]
     public function delete(Products $product): Response
